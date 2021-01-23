@@ -1,11 +1,9 @@
-fun! VimFlexPlugin()
+fun! VimFlexPlugin(timer)
     lua for k in pairs(package.loaded) do if k:match("^vim%-flex") then package.loaded[k] = nill end end
-    lua require("vim-flex").createFloatingWindow()
+    lua require("vim-flex").timeToFlex()
 endfun
-
-let g:vim_flex_variable = 42
 
 augroup vimFlexPlugin
     autocmd!
-    autocmd VimResized * :lua require("vim-flex").onResize()
+    autocmd VimEnter * call timer_start(60 * 60 * 1000, 'VimFlexPlugin', {'repeat': -1})
 augroup END
