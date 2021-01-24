@@ -1,3 +1,16 @@
+local function startVimFlex()
+    local interval_min = vim.g.vim_flex_interval_min or 60
+
+    interval_msec = interval_min * 1000 * 60
+    -- interval_msec = interval_min * 1000       -- Convert to sec for debugging
+
+    vim.api.nvim_exec("let g:vim_flex_timer_id = timer_start(" ..interval_msec.. ", 'VimFlexTimeToFlex', {'repeat': -1})", true)
+end
+
+local function stopVimFlex()
+    vim.api.nvim_exec("call timer_stop(" ..vim.g.vim_flex_timer_id.. ")", true)
+end
+
 local function generateLines()
     -- Read text from file
     lines = {}
@@ -6,7 +19,10 @@ local function generateLines()
     end
 
     -- Calculate time stamps
-    flex_sec = 300
+    local flex_min = vim.g.vim_flex_time_min or 5
+    local flex_sec = flex_min * 60
+    flex_msec = flex_sec * 1000
+
     local start = os.time()
     local stop = start + flex_sec
 
@@ -65,8 +81,13 @@ local function updateTime()
 end
 
 local function timeToFlex()
+    -- If vim flex is disabled do nothing
+    if vim.g.vim_flex_disable == 1 then
+        return
+    end
+
     createFloatingWindow()
-    vim.wait(flex_sec * 1000, updateTime, 1000, false)
+    vim.wait(flex_msec, updateTime, 1000, false)
     deleteFloatingWindow()
 end
 
@@ -82,5 +103,7 @@ end
 
 
 return {
+    startVimFlex = startVimFlex,
+    stopVimFlex = stopVimFlex,
     timeToFlex = timeToFlex,
 }
