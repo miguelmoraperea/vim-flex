@@ -2,7 +2,7 @@ local function startVimFlex()
     local interval_min = vim.g.vim_flex_interval_min or 60
 
     interval_msec = interval_min * 1000 * 60
-    -- interval_msec = interval_min * 1000       -- Convert to sec for debugging
+    -- interval_msec = interval_min * 1000       -- Use value as seconds, for debugging
 
     vim.api.nvim_exec("let g:vim_flex_timer_id = timer_start(" ..interval_msec.. ", 'VimFlexTimeToFlex', {'repeat': -1})", true)
 end
@@ -54,6 +54,7 @@ local function createFloatingWindow()
         height = height - 10,
         col = 5,
         row = 5,
+        style="minimal",
     })
 
     -- Clear and redraw the screen
