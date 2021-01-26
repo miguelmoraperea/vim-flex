@@ -11,10 +11,39 @@ local function stopVimFlex()
     vim.api.nvim_exec("call timer_stop(" ..vim.g.vim_flex_timer_id.. ")", true)
 end
 
+function file_exists(name)
+   local file = io.open(name, 'r')
+   if file ~= nil then
+       io.close(file)
+       return true
+   else
+       return false
+   end
+end
+
+
 local function generateLines()
     -- Read text from file
+    local rtp = vim.api.nvim_exec('set rtp?', true)
+    local home = os.getenv('HOME')
+
+    local results = {}
+    for match in string.gmatch(rtp, "[^,]+") do
+      table.insert(results, match)
+    end
+
+    local file = nil
+    for k,v in ipairs(results) do
+        name = v..'/lua/vim-flex/time_to_flex_text'
+        name = name:gsub('~', home..'/')
+        if file_exists(name) then
+            file = name
+            break
+        end
+    end
+
     lines = {}
-    for line in io.lines("/home/miguel/Desktop/git/vim-flex/lua/vim-flex/time_to_flex_text") do
+    for line in io.lines(file) do
         lines[#lines + 1] = line
     end
 
