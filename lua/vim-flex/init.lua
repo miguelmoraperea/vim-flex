@@ -178,16 +178,6 @@ local function time_to_flex()
     delete_floating_window()
 end
 
-local function on_resize()
-    local stats = vim.api.nvim_list_uis()[1]
-    local width = stats.width
-    local height = stats.height
-
-    print("Resizing window to size:", win_id, width, height)
-    vim.api.nvim_win_set_width(win_id, width - 10)
-    vim.api.nvim_win_set_height(win_id, height - 10)
-end
-
 return {
     start_timer_to_flex = start_timer_to_flex,
     stop_timer_to_flex = stop_timer_to_flex,
