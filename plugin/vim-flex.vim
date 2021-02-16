@@ -8,7 +8,7 @@ fun! VimFlexStop()
     lua require("vim-flex").stop_timer_to_flex()
 endfun
 
-fun! VimFlexTimeToFlex()
+fun! VimFlexTimeToFlex(timer)
     lua for k in pairs(package.loaded) do if k:match("^vim%-flex") then package.loaded[k] = nill end end
     lua require("vim-flex").time_to_flex()
 endfun
